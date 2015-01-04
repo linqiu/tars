@@ -18,7 +18,8 @@
     "hubot-redis-brain": "0.0.2",
     "hubot-scripts": "^2.5.16",
     "hubot-slack": "^3.2.1",
-    "hubot": "^2.11.0"
+    "hubot": "^2.11.0",
+    "lodash": "~2.4.1"
   },
   "engines": {
     "node": "0.10.x"
