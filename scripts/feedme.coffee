@@ -77,34 +77,35 @@ module.exports = (robot) ->
 
         msg.send message_to_send
 
-  showNearbyTrucks = (msg, markers, zip, pointLat, pointLong) ->
+  showNearbyTrucks = (msg, markers, address, pointLat, pointLong) ->
     message_to_send = ''
     metro_message=''
-    half_km_away = []
+    nearby = []
     metro_place_trucks = []
-        
+
+    if !address
+      address = "Gallery Place"
+      nearby_distance = 0.5
+    else
+      # search a bit wider if using custom address
+      nearby_distance = 1.0
+
     for marker in markers
       marker.distance = getCurrentDistance(marker.coord_lat, marker.coord_long, pointLat, pointLong)
-      if marker.distance < 0.5
-        half_km_away.push(marker)
-      else if marker.distance == 0.5
+      if marker.distance < nearby_distance
+        nearby.push(marker)
+      else if marker.distance == nearby_distance
         metro_place_trucks.push(marker)
 
-    if half_km_away.length > 0
-      if zip
-        message_to_send = "Trucks near#{zip}: \n"
-      else
-        message_to_send = "Trucks at Gallery Place: \n"
-      for truck in half_km_away
+    if nearby.length > 0
+      message_to_send = "Trucks near #{address}: \n"
+      for truck in nearby
         message_to_send = message_to_send + "#{truck.print_name} http://www.twitter.com/#{truck.truck}, #{truck.distance} km away \n"
     else
-      if zip
-        message_to_send = "Oh no, there's nothing near #{zip}!\n"
-      else
-        message_to_send = "Oh no, there's nothing near Gallery Place!\n"
+      message_to_send = "Oh no, there's nothing near #{address}!\n"
 
-    # This stuff is only relevant if we're searching from Chinatown
-    if !zip
+    # This stuff is only relevant if we're searching from Gallery Place
+    if address == "Gallery Place"
       if metro_place_trucks.length > 0
         message_to_send = message_to_send + "\nTrucks at Metro Center: \n"
         if(_.findWhere(metro_place_trucks, {print_name: 'Captain Cookie'}))
@@ -137,20 +138,26 @@ module.exports = (robot) ->
           msg.send "No trucks on the map :disapproval_look:"
           return
 
-        zip = msg.match[1]
+        query = msg.match[1].trim()
 
-        if zip
+        if query
           # shamelessly ripped off from: http://bit.ly/1xzaecc
           robot.http("https://maps.googleapis.com/maps/api/geocode/json")
             .header('User-Agent', 'Hubot Geocode Location Engine')
             .query({
-              address: zip,
+              address: query,
               sensor: false
             })
             .get() (err, res, body) ->
               response = JSON.parse(body)
-              pointLat = response.results[0].geometry.location.lat
-              pointLong = response.results[0].geometry.location.lng
-              showNearbyTrucks(msg, locations.markers, zip, pointLat, pointLong)
+              if response.results.length == 0
+                msg.send "Oh no, I couldn't find \"#{query}\". I have failed. :disappointed:"
+                return
+
+              result = response.results[0]
+              msg.send "Searching for food near: #{result.formatted_address}"
+              pointLat = result.geometry.location.lat
+              pointLong = result.geometry.location.lng
+              showNearbyTrucks(msg, locations.markers, result.formatted_address, pointLat, pointLong)
         else
           showNearbyTrucks(msg, locations.markers)
