@@ -103,16 +103,18 @@ module.exports = (robot) ->
       else
         message_to_send = "Oh no, there's nothing near Gallery Place!\n"
 
-    if metro_place_trucks.length > 0
-      message_to_send = message_to_send + "\nTrucks at Metro Center: \n"
-      if(_.findWhere(metro_place_trucks, {print_name: 'Captain Cookie'}))
-        metro_message = "Captain Cookie http://www.twitter.com/captaincookiedc \n" + metro_message
-        if((metro_place_trucks.length-1)>0)
-          metro_message = metro_message + "And #{metro_place_trucks.length-1} Other Trucks\n"
+    # This stuff is only relevant if we're searching from Chinatown
+    if !zip
+      if metro_place_trucks.length > 0
+        message_to_send = message_to_send + "\nTrucks at Metro Center: \n"
+        if(_.findWhere(metro_place_trucks, {print_name: 'Captain Cookie'}))
+          metro_message = "Captain Cookie http://www.twitter.com/captaincookiedc \n" + metro_message
+          if((metro_place_trucks.length-1)>0)
+            metro_message = metro_message + "And #{metro_place_trucks.length-1} Other Trucks\n"
+        else
+          metro_message = metro_message + "There are #{metro_place_trucks.length} Trucks In A Galaxy Far Far Away..\n"
       else
-        metro_message = metro_message + "There are #{metro_place_trucks.length} Trucks In A Galaxy Far Far Away..\n"
-    else
-      message_to_send = message_to_send + "\nAnd nothing at Metro Center!\n"
+        message_to_send = message_to_send + "\nAnd nothing at Metro Center!\n"
 
     message_to_send= message_to_send+metro_message
     msg.send message_to_send
