@@ -3,6 +3,7 @@
 #
 # Commands:
 #   hubot insult
+#   hubot call <user name> a <insult> - reply " <user name>, you're a <insult>"
 
 _ = require "lodash"
 
@@ -28,3 +29,9 @@ module.exports = (robot) ->
         )
 
         msg.send new_insult.join(' ')
+
+  robot.respond /call (.*) a (.*)/i, (msg) ->
+    name = msg.match[1].trim()
+    insult = msg.match[2].trim()
+
+    msg.send "#{name}, you're a #{insult}"
