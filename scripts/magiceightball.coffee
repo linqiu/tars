@@ -5,7 +5,7 @@
 #
 
 module.exports = (robot) ->
-  robot.hear /will /i, (msg) ->
+  robot.respond /will /i, (msg) ->
     num_choices = 5
     rand = Math.floor(Math.random() * num_choices)
 

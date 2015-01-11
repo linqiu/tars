@@ -5,5 +5,5 @@
 #
 
 module.exports = (robot) ->
-  robot.hear /spot me/i, (msg) ->
+  robot.respond /spot me/i, (msg) ->
     msg.send "you got this!"
