@@ -6,6 +6,9 @@
 #   hubot animate me <query> - The same thing as `image me`, except adds a few parameters to try to return an animated GIF instead.
 #   hubot mustache me <url> - Adds a mustache to the specified URL.
 #   hubot mustache me <query> - Searches Google Images for the specified query and mustaches it.
+#   hubot image unsafe <query> - Safe search is OFF. Use at your own god damn risk.
+#   hubot animate unsafe <query> - Oh God Dammit. Ricky is gonna have a field day.
+
 
 module.exports = (robot) ->
   robot.respond /(image|img)( me) (.*)/i, (msg) ->
