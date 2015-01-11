@@ -1,8 +1,11 @@
 # Description:
-#   ask me anything
+#   Magic 8 ball script for tars
+#
+# Commands:
+#   hubot will <text> - reply with 8 ball response
 #
 # Notes:
-#
+#   Just like the on you bought at spencers
 
 module.exports = (robot) ->
   robot.respond /will /i, (msg) ->

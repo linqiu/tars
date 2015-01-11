@@ -3,6 +3,7 @@
 #
 # Commands:
 #   hubot insult
+#   hubot call <user name> a <insult> - reply " <user name>, you're a <insult>"
 
 _ = require "lodash"
 
