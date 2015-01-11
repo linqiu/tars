@@ -28,3 +28,9 @@ module.exports = (robot) ->
         )
 
         msg.send new_insult.join(' ')
+
+  robot.hear /call (.*) a (.*)/i, (msg) ->
+    name = msg.match[1].trim()
+    insult = msg.match[2].trim()
+
+    msg.send "#{name}, you're a #{insult}"
