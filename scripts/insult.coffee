@@ -34,4 +34,9 @@ module.exports = (robot) ->
     name = msg.match[1].trim()
     insult = msg.match[2].trim()
 
-    msg.send "#{name}, you're a #{insult}"
+    # switch statement for easter egg replies
+    response = switch insult
+      when "liar" then "lying liar who lies with their liar mouth"
+      else insult
+
+    msg.send "#{name}, you're a #{response}"
